@@ -20,7 +20,7 @@
 ;;; Define Back-End
 
 (org-export-define-derived-backend 'leanpub 'md
-  :export-block '("leanpub" "LEANPUB")
+  ;; :export-block '("leanpub" "LEANPUB")
   :menu-entry
   '(?L "Export to Leanpub Markdown"
        ((?L "To temporary buffer"
@@ -83,16 +83,15 @@ definitions at the end."
   (concat
    contents
    "\n\n"
-   (let ((definitions (org-export-collect-footnote-definitions
-                       (plist-get info :parse-tree) info)))
+   (let ((definitions (org-export-collect-footnote-definitions info)))
      ;; Looks like leanpub do not like : in labels.
      (mapconcat (lambda (ref)
                   (let ((id (format "[^%s]: " (replace-regexp-in-string
                                                ":" "_"
                                                (let ((label (cadr ref)))
-                                                (if label
-                                                    label
-                                                  (car ref)))))))
+						 (if label
+						     label
+						   (car ref)))))))
                     (let ((def (nth 2 ref)))
                       (concat id (org-export-data def info)))))
                 definitions "\n\n"))))
